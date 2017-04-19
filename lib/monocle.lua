@@ -1,3 +1,4 @@
+-- Source: https://github.com/kjarvi/monocle
 Monocle = {}
 function Monocle.new(initial)
 	Monocle.active = initial.isActive or false
@@ -117,7 +118,9 @@ function Monocle.draw()
 end
 
 local function error_printer(msg, layer)
-	print((debug.traceback("Error: " .. tostring(msg), 1+(layer or 1)):gsub("\n[^\n]+$", "")))
+	print((debug.traceback("Error: " .. tostring(msg), 1+(layer or 1)):gsub("
+[^
+]+$", "")))
 end
 
 function love.errhand(msg)
@@ -162,27 +165,35 @@ function love.errhand(msg)
 	for i, v in pairs(Monocle.results) do
 		table.insert(mon, Monocle.names[i] .. ": " .. v)
 	end
-	table.insert(err, "[Monocle] An error has occurred! You can either close this and reload the game, or edit your code and come back to this window. The game should automatically reload it's main.lua file when it detects changes in your files (the files specified by 'filesToWatch' in your Monocle.new() parameters\n")
-	table.insert(err, "Error\n")
-	table.insert(err, msg.."\n\n")
+	table.insert(err, "[Monocle] An error has occurred! You can either close this and reload the game, or edit your code and come back to this window. The game should automatically reload it's main.lua file when it detects changes in your files (the files specified by 'filesToWatch' in your Monocle.new() parameters
+")
+	table.insert(err, "Error
+")
+	table.insert(err, msg.."
 
-	for l in string.gmatch(trace, "(.-)\n") do
+")
+
+	for l in string.gmatch(trace, "(.-)
+") do
 		if not string.match(l, "boot.lua") then
-			l = string.gsub(l, "stack traceback:", "Traceback\n")
+			l = string.gsub(l, "stack traceback:", "Traceback
+")
 			table.insert(err, l)
 		end
 	end
 
 
-	local p = table.concat(err, "\n")
+	local p = table.concat(err, "
+")
 
-	p = string.gsub(p, "\t", "")
+	p = string.gsub(p, "	", "")
 	p = string.gsub(p, "%[string \"(.-)\"%]", "%1")
 
 	local function draw()
 		love.graphics.clear()
 		love.graphics.printf(p, 150, 70, love.graphics.getWidth()-150)
-		love.graphics.printf(table.concat(mon,'\n'), 0, 15, 150)
+		love.graphics.printf(table.concat(mon,'
+'), 0, 15, 150)
 		love.graphics.present()
 	end
 
@@ -221,4 +232,3 @@ end
 
 
 return Monocle
-

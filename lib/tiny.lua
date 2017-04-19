@@ -1,3 +1,4 @@
+-- Source: https://github.com/bakpakin/tiny-ecs
 --[[
 Copyright (c) 2016 Calvin Rose
 
@@ -95,10 +96,11 @@ do
 
     local loadstring = loadstring or load
     local function getchr(c)
-        return "\\" .. c:byte()
+        return "\" .. c:byte()
     end
     local function make_safe(text)
-        return ("%q"):format(text):gsub('\n', 'n'):gsub("[\128-\255]", getchr)
+        return ("%q"):format(text):gsub('
+', 'n'):gsub("[\128-\255]", getchr)
     end
 
     local function filterJoinRaw(prefix, seperator, ...)
@@ -116,9 +118,11 @@ do
                 error 'Filter token must be a string or a filter function.'
             end
         end
-        local source = ('%s\nreturn function(system, e) return %s(%s) end')
+        local source = ('%s
+return function(system, e) return %s(%s) end')
             :format(
-                table.concat(build, '\n'),
+                table.concat(build, '
+'),
                 prefix,
                 table.concat(accum, seperator))
         local loader, err = loadstring(source)
